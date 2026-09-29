@@ -5,7 +5,10 @@ import '../betting/betting_screen.dart';
 import '../instruction/how_to_play_screen.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  final String username;
+  final int balance;
+
+  const MainScreen({super.key, required this.username, required this.balance});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,19 @@ class MainScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Số dư tài khoản: 100 Coin", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(
+              "Số dư tài khoản: $balance Coin",
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const BettingScreen()),
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        BettingScreen(username: username, balance: balance),
+                  ),
                 );
               },
               child: const Text("Bắt Đầu Chơi"),
