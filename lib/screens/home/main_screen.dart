@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../auth/login_screen.dart'; // Đổi đường dẫn theo vị trí file LoginScreen của bạn
 import '../betting/betting_screen.dart';
 import '../instruction/how_to_play_screen.dart';
 
@@ -9,7 +10,22 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sảnh Chính (Main Menu)")),
+      appBar: AppBar(
+        title: const Text("Sảnh Chính (Main Menu)"),
+        actions: [
+          // Nút Đăng xuất trên thanh AppBar
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Đăng xuất',
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,6 +50,19 @@ class MainScreen extends StatelessWidget {
                 );
               },
               child: const Text("Hướng Dẫn Chơi (How to play)"),
+            ),
+            const SizedBox(height: 10),
+            // Nút Đăng xuất ở dưới menu
+            TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+              },
+              icon: const Icon(Icons.logout),
+              label: const Text("Đăng Xuất"),
             ),
           ],
         ),
