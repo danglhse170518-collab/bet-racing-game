@@ -237,4 +237,35 @@ void main() {
       isNotNull,
     );
   });
+
+  testWidgets('Race đếm ngược, chạy tới đích rồi sang Result', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: RaceScreen(
+          racers: racers,
+          baseDurationSeconds: 3,
+          bets: [BetItem(racerId: 1, betAmount: 20)],
+          currentBalance: 100,
+          username: 'admin',
+        ),
+      ),
+    );
+    expect(find.text('Nhấn START để bắt đầu'), findsOneWidget);
+    expect(find.text('Cược: 20 Coin'), findsOneWidget);
+
+    await tester.tap(find.text('START RUN'));
+    await tester.pump();
+    expect(find.text('3'), findsOneWidget);
+
+    // Đếm ngược 3s + chạy tối đa ~7s (3.4s / tốc độ nhỏ nhất 50%)
+    final winnerText = find.textContaining('về nhất!');
+    for (var i = 0; i < 110 && winnerText.evaluate().isEmpty; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(winnerText, findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 1500));
+    await tester.pumpAndSettle();
+    expect(find.byType(ResultScreen), findsOneWidget);
+  });
 }
